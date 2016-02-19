@@ -1,0 +1,4 @@
+[submodule "Submodules/sqlcipher"]
+	path = Submodules/sqlcipher
+	url = https://github.com/idaisuke/sqlcipher.git
+	branch = scandium
