@@ -1,10 +1,44 @@
 #include "HelloWorldScene.h"
 #include "sqlite3.h"
-
+#include "scandium.h"
 USING_NS_CC;
 
-#define TEST_SQLCIPHER
-#define TEST_OPENSSL
+#define TEST_SCANDIUM
+//#define TEST_SQLCIPHER
+//#define TEST_OPENSSL
+
+#ifdef TEST_SCANDIUM
+using namespace scandium;
+void testScandium() {
+
+    sqlite_database db(cocos2d::FileUtils::getInstance()->getWritablePath() + "scandium.db");
+
+    db.open("12345678");
+
+    {
+        auto transaction = db.create_transaction();
+
+        db.exec_sql("CREATE TABLE chara(id INTEGER, name TEXT);");
+
+        auto stmt = db.prepare_statement("INSERT INTO chara VALUES(?, ?);");
+
+        db.exec(stmt, 1, "キャラX");
+        db.exec(stmt, 2, "キャラY");
+        db.exec(stmt, 4, "キャラZ");
+
+        transaction.commit();
+    }
+
+    for (auto &&cursor : db.query("SELECT * FROM chara;")) {
+        auto id = cursor.get<int>("id");
+        auto name = cursor.get<const char *>("name");
+
+
+        CCLOG("XXXXX id = %d, name = %s", id, name);
+    }
+
+}
+#endif
 
 #ifdef TEST_SQLCIPHER
 
@@ -97,6 +131,10 @@ bool HelloWorld::init() {
     if (!Layer::init()) {
         return false;
     }
+
+#ifdef TEST_SCANDIUM
+    testScandium();
+#endif
 
 #ifdef TEST_SQLCIPHER
     testSQLCipher();
