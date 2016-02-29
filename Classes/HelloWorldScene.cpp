@@ -14,6 +14,12 @@ void testScandium() {
     sqlite_database db(cocos2d::FileUtils::getInstance()->getWritablePath() + "scandium.db");
 
     db.open("12345678");
+    db.set_before_update_user_version([](sqlite_database *db, int old_version, int new_version) {
+        if (old_version <= 0) {
+            db->exec_sql("CREATE TABLE chara(id INTEGER, name TEXT);");
+        }
+    });
+    db.update_user_version(1);
 
     {
         auto transaction = db.create_transaction();
@@ -22,9 +28,9 @@ void testScandium() {
 
         auto stmt = db.prepare_statement("INSERT INTO chara VALUES(?, ?);");
 
-        db.exec(stmt, 1, "キャラX");
-        db.exec(stmt, 2, "キャラY");
-        db.exec(stmt, 4, "キャラZ");
+        stmt.exec_with_bindings(1, "キャラX");
+        stmt.exec_with_bindings(2, "キャラY");
+        stmt.exec_with_bindings(4, "キャラZ");
 
         transaction.commit();
     }
@@ -32,7 +38,6 @@ void testScandium() {
     for (auto &&cursor : db.query("SELECT * FROM chara;")) {
         auto id = cursor.get<int>("id");
         auto name = cursor.get<const char *>("name");
-
 
         CCLOG("XXXXX id = %d, name = %s", id, name);
     }
