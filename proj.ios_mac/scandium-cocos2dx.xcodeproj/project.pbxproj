@@ -777,7 +777,7 @@
 					"\"$(SRCROOT)/../cocos2d/external\"",
 					"\"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk\"",
 					"\"$(SRCROOT)/../Libraries/OpenSSL/iOS/include\"",
-					"\"$(SRCROOT)/../Libraries/SQLCipher/Android/armeabi/include\"",
+					"\"$(SRCROOT)/../Libraries/Boost/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -809,7 +809,7 @@
 					"\"$(SRCROOT)/../cocos2d/external\"",
 					"\"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk\"",
 					"\"$(SRCROOT)/../Libraries/OpenSSL/iOS/include\"",
-					"\"$(SRCROOT)/../Libraries/SQLCipher/Android/armeabi/include\"",
+					"\"$(SRCROOT)/../Libraries/Boost/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;

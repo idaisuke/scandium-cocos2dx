@@ -8,6 +8,8 @@ USING_NS_CC;
 //#define TEST_OPENSSL
 
 #ifdef TEST_SCANDIUM
+int test_scandium(int argc, char **argv);
+
 using namespace scandium;
 void testScandium() {
 
@@ -33,6 +35,8 @@ void testScandium() {
 
         CCLOG("XXXXX id = %d, name = %s", id, name);
     }
+
+    test_scandium(0, nullptr);
 }
 #endif
 
