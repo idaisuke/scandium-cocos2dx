@@ -60,6 +60,7 @@
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
+		926D4CC4480FCA5DC7A57789 /* test_scandium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 926D4B5AEEE6C5DE142AC5BE /* test_scandium.cpp */; };
 		9F55B8D41C7422BA003ADA9A /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F8305CB1C741B2300E5AE28 /* libsqlcipher.a */; };
 		9F985B851C7BEF060012FB12 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9F985B831C7BEF060012FB12 /* LICENSE */; };
 		9F985B861C7BEF060012FB12 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9F985B841C7BEF060012FB12 /* README.md */; };
@@ -171,6 +172,7 @@
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		926D4B5AEEE6C5DE142AC5BE /* test_scandium.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_scandium.cpp; sourceTree = "<group>"; };
 		9F8305C51C741B2200E5AE28 /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = ../Submodules/sqlcipher/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		9F985B831C7BEF060012FB12 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9F985B841C7BEF060012FB12 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				9F985B821C7BEF060012FB12 /* include */,
 				9F985B831C7BEF060012FB12 /* LICENSE */,
 				9F985B841C7BEF060012FB12 /* README.md */,
+				926D4B5AEEE6C5DE142AC5BE /* test_scandium.cpp */,
 			);
 			name = scandium;
 			path = ../Submodules/scandium;
@@ -572,6 +575,7 @@
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				926D4CC4480FCA5DC7A57789 /* test_scandium.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
