@@ -11,8 +11,10 @@ $(call import-add-path,$(LOCAL_PATH)/../../../Libraries)
 # Project-specific import path END
 
 MY_SRC_FILES := $(shell find $(LOCAL_PATH)/../../../Classes -name *.cpp)
+MY_SRC_FILES += $(LOCAL_PATH)/../../../Submodules/scandium/test_scandium.cpp
 
 MY_C_INCLUDES := $(shell find $(LOCAL_PATH)/../../../Classes -type d)
+MY_C_INCLUDES += $(LOCAL_PATH)/../../../Libraries/boost/include
 MY_C_INCLUDES += $(LOCAL_PATH)/../../../Submodules/scandium/include
 
 LOCAL_MODULE := cocos2dcpp_shared

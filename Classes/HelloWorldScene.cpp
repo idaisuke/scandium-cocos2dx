@@ -1,114 +1,8 @@
 #include "HelloWorldScene.h"
-#include "sqlite3.h"
 #include "scandium.h"
 USING_NS_CC;
 
-#define TEST_SCANDIUM
-//#define TEST_SQLCIPHER
-//#define TEST_OPENSSL
-
-#ifdef TEST_SCANDIUM
-int test_scandium(int argc, char **argv);
-
-using namespace scandium;
-void testScandium() {
-
-    database db(cocos2d::FileUtils::getInstance()->getWritablePath() + "scandium.db");
-
-    db.open("12345678");
-    db.set_before_upgrade_user_version([](database *db, int old_version, int new_version) {
-        if (old_version <= 0) {
-            db->exec_sql("CREATE TABLE chara(id INTEGER, name TEXT);");
-
-            auto stmt = db->prepare_statement("INSERT INTO chara VALUES(?, ?);");
-
-            stmt.exec_with_bindings(1, "キャラX");
-            stmt.exec_with_bindings(2, "キャラY");
-            stmt.exec_with_bindings(4, "キャラZ");
-        }
-    });
-    db.update_user_version(1);
-
-    for (auto &&cursor : db.query("SELECT * FROM chara;")) {
-        auto id = cursor.get<int>("id");
-        auto name = cursor.get<const char *>("name");
-
-        CCLOG("XXXXX id = %d, name = %s", id, name);
-    }
-
-    test_scandium(0, nullptr);
-}
-#endif
-
-#ifdef TEST_SQLCIPHER
-
-void testSQLCipher() {
-    auto path = cocos2d::FileUtils::getInstance()->getWritablePath() + "test.db";
-    std::string passphrase("abcdefghijklmn");
-    sqlite3 *db;
-    sqlite3_open(path.c_str(), &db);
-    sqlite3_key(db, passphrase.c_str(), static_cast<int>(passphrase.length()));
-    sqlite3_exec(db, "CREATE TABLE chara(id INTEGER, name TEXT);", nullptr, nullptr, nullptr);
-    sqlite3_exec(db, "INSERT INTO chara VALUES(1, 'キャラA');", nullptr, nullptr, nullptr);
-    sqlite3_exec(db, "INSERT INTO chara VALUES(2, 'キャラB');", nullptr, nullptr, nullptr);
-    sqlite3_exec(db, "INSERT INTO chara VALUES(3, 'キャラC');", nullptr, nullptr, nullptr);
-
-    sqlite3_stmt *stmt;
-    sqlite3_prepare(db, "SELECT * FROM chara;", -1, &stmt, nullptr);
-    while (SQLITE_DONE != sqlite3_step(stmt)) {
-        auto id = sqlite3_column_int(stmt, 0);
-        auto name = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
-        CCLOG("id = %d, name = %s", id, name);
-    }
-    sqlite3_finalize(stmt);
-
-    sqlite3_close(db);
-}
-
-#endif
-
-#ifdef TEST_OPENSSL
-
-#include <array>
-#include <vector>
-#include <openssl/evp.h>
-
-cocos2d::Sprite *createSpriteFromEncryptedFile(const std::string &fileName) {
-    static const std::array<unsigned char, 16> KEY = {
-            'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a',
-            'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'};
-
-    auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
-    if (auto texture = cocos2d::Director::getInstance()->getTextureCache()->getTextureForKey(fullPath)) {
-        return cocos2d::Sprite::createWithTexture(texture);
-    }
-
-    auto data = cocos2d::FileUtils::getInstance()->getDataFromFile(fullPath);
-
-    EVP_CIPHER_CTX context;
-    EVP_DecryptInit(&context, EVP_aes_128_ecb(), KEY.data(), nullptr);
-
-    std::vector<unsigned char> buff(data.getSize());
-    int len;
-    int outLen = 0;
-    if (!EVP_DecryptUpdate(&context, buff.data(), &len, data.getBytes(), static_cast<int>(data.getSize()))) {
-        return nullptr;
-    }
-    outLen += len;
-
-    if (!EVP_DecryptFinal(&context, buff.data() + len, &len)) {
-        return nullptr;
-    }
-    outLen += len;
-
-    cocos2d::Image image;
-    image.initWithImageData(buff.data(), outLen);
-
-    auto texture = cocos2d::Director::getInstance()->getTextureCache()->addImage(&image, fullPath);
-    return cocos2d::Sprite::createWithTexture(texture);
-}
-
-#endif
+int test_scandium(const std::string &db_root_path);
 
 Scene *HelloWorld::createScene() {
     // 'scene' is an autorelease object
@@ -132,13 +26,7 @@ bool HelloWorld::init() {
         return false;
     }
 
-#ifdef TEST_SCANDIUM
-    testScandium();
-#endif
-
-#ifdef TEST_SQLCIPHER
-    testSQLCipher();
-#endif
+    test_scandium(FileUtils::getInstance()->getWritablePath());
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -177,11 +65,7 @@ bool HelloWorld::init() {
     this->addChild(label, 1);
 
     // add "HelloWorld" splash screen"
-#ifdef TEST_OPENSSL
-    auto sprite = createSpriteFromEncryptedFile("HelloWorld.dat");
-#else
     auto sprite = Sprite::create("HelloWorld.png");
-#endif
 
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
